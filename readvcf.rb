@@ -1,15 +1,24 @@
 
-def write_list(info)
-    file = File.new("logfile.txt", "a")
+def write_list(info,output_dir)
+    output=File.join(output_dir,"output_file.txt")
+    file = File.new(output, "a")
 	file.puts(info)
     file.close
  end
  
-
-Dir.chdir("Exported contacts")
+ input_dir=ARGV[0]  #input directory and output directory to be specified
+ output_dir=ARGV[1]
+ if input_dir.nil?
+   puts "Error. No input directory specified."
+   break   
+ else 
+ end
+if output_dir.nil?
+   output_dir=Dir.pwd
+ end
+Dir.chdir(input_dir)
 myDir=Dir.pwd
 myList=Dir.entries(myDir)
-#myList2=Array.new(myList)
 puts "Now in directory #{myDir}"
 mycount=1
 for contact in 2..myList.length-1 do
@@ -18,18 +27,13 @@ for contact in 2..myList.length-1 do
     mycounter = 0
     write_list ("Filename : #{myList[contact]} ")
     file = File.new(myList[contact], "r")
-    while (line = file.gets)
-	    #puts "#{mycounter}: #{line}" 
-	    #f = File.new("logfile.txt", "a")
-        #puts line if mycounter==5 || mycounter==7
-        #f.close
-        myLine=line.scan(/\w+/)
-       # puts "Scan method: #{myLine}"
+    while (line = file.gets)	    
+        myLine=line.scan(/\w+/)       
         if myLine.include?("FN") || myLine.include?("TEL") ||  myLine.include?("SKYPE") || myLine.include?("NICKNAME") || myLine.include?("EMAIL")
-			write_list (myLine.join(' '))
+			write_list (myLine.join(' '),output_dir)
 		
 		end
 end
-		write_list ("")
+		write_list ((""),output_dir)
 
 end
